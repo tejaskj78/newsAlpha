@@ -1,0 +1,18 @@
+[project]
+name = "newsalpha"
+version = "0.1.0"
+description = "News-driven stock signal engine: global news -> sentiment -> explainable BUY/SELL/HOLD"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["B008", "E501", "SIM905"]  # Depends() defaults; formatter owns line length

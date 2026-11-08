@@ -1,0 +1,161 @@
+# The stock universe and the macro themes the engine understands.
+#
+# Alias matching rule: an alias written in lowercase is matched case-insensitively;
+# an alias containing any uppercase letter is matched case-sensitively
+# (so "Apple" matches the company but not "apple pie").
+
+tickers:
+  # ---------------- India (NSE) ----------------
+  RELIANCE.NS:
+    name: Reliance Industries
+    market: IN
+    sector: energy
+    aliases: [reliance industries, "RIL", jio platforms, reliance jio, mukesh ambani, "Reliance"]
+  ONGC.NS:
+    name: Oil and Natural Gas Corp
+    market: IN
+    sector: energy
+    aliases: [ongc, oil and natural gas corporation]
+  TCS.NS:
+    name: Tata Consultancy Services
+    market: IN
+    sector: it
+    aliases: ["TCS", tata consultancy]
+  INFY.NS:
+    name: Infosys
+    market: IN
+    sector: it
+    aliases: [infosys, salil parekh]
+  HDFCBANK.NS:
+    name: HDFC Bank
+    market: IN
+    sector: banking
+    aliases: [hdfc bank]
+  ICICIBANK.NS:
+    name: ICICI Bank
+    market: IN
+    sector: banking
+    aliases: [icici bank]
+  SBIN.NS:
+    name: State Bank of India
+    market: IN
+    sector: banking
+    aliases: [state bank of india, "SBI"]
+  MARUTI.NS:
+    name: Maruti Suzuki
+    market: IN
+    sector: auto
+    aliases: [maruti suzuki, maruti]
+  SUNPHARMA.NS:
+    name: Sun Pharmaceutical
+    market: IN
+    sector: pharma
+    aliases: [sun pharma, sun pharmaceutical]
+  INDIGO.NS:
+    name: InterGlobe Aviation (IndiGo)
+    market: IN
+    sector: aviation
+    aliases: ["IndiGo", interglobe aviation]
+  BEL.NS:
+    name: Bharat Electronics
+    market: IN
+    sector: defense
+    aliases: [bharat electronics]
+
+  # ---------------- United States ----------------
+  AAPL:
+    name: Apple
+    market: US
+    sector: tech
+    aliases: ["Apple", apple inc, iphone, tim cook, "AAPL"]
+  MSFT:
+    name: Microsoft
+    market: US
+    sector: tech
+    aliases: [microsoft, satya nadella, azure, "MSFT"]
+  NVDA:
+    name: Nvidia
+    market: US
+    sector: semis
+    aliases: [nvidia, jensen huang, "NVDA"]
+  TSLA:
+    name: Tesla
+    market: US
+    sector: auto
+    aliases: [tesla, elon musk, "TSLA"]
+  XOM:
+    name: Exxon Mobil
+    market: US
+    sector: energy
+    aliases: [exxon, exxonmobil, exxon mobil]
+  JPM:
+    name: JPMorgan Chase
+    market: US
+    sector: banking
+    aliases: [jpmorgan, jp morgan, jamie dimon]
+  LMT:
+    name: Lockheed Martin
+    market: US
+    sector: defense
+    aliases: [lockheed martin, lockheed]
+  DAL:
+    name: Delta Air Lines
+    market: US
+    sector: aviation
+    aliases: [delta air lines, delta airlines]
+
+# Macro themes: if an article matches any phrase, every ticker in the listed
+# sectors gets the signed impact. "*" means the whole market.
+# Impacts are deliberately modest; direct company news should dominate.
+themes:
+  oil_up:
+    description: Crude oil prices rising
+    phrases: [oil prices rise, oil prices rose, oil prices jump, crude rises, crude jumps, crude surges,
+              oil surges, oil rallies, brent rises, brent surges, opec cut, opec+ cut, output cut, oil hits]
+    impacts: {energy: 0.5, aviation: -0.5, auto: -0.2}
+  oil_down:
+    description: Crude oil prices falling
+    phrases: [oil prices fall, oil prices fell, oil prices drop, crude falls, crude slumps, crude drops,
+              oil slides, oil plunges, brent falls, brent drops, opec raises output]
+    impacts: {energy: -0.5, aviation: 0.4, auto: 0.2}
+  rate_hike:
+    description: Central bank tightening
+    phrases: [rate hike, hikes rates, raises interest rates, raises rates, hawkish, repo rate hike]
+    impacts: {banking: 0.15, tech: -0.25, semis: -0.25, it: -0.15, auto: -0.25, "*": -0.1}
+  rate_cut:
+    description: Central bank easing
+    phrases: [rate cut, cuts rates, cuts interest rates, lowers interest rates, dovish, repo rate cut]
+    impacts: {tech: 0.25, semis: 0.25, it: 0.15, auto: 0.3, banking: 0.1, "*": 0.15}
+  ai_boom:
+    description: AI / data-center demand
+    phrases: [ai demand, ai spending, data center demand, data centre demand, chip demand, gpu demand, ai boom]
+    impacts: {semis: 0.6, tech: 0.3, it: 0.15}
+  trade_war:
+    description: Tariffs, sanctions, export controls
+    phrases: [tariff, tariffs, trade war, export ban, export controls, sanctions on]
+    impacts: {semis: -0.35, tech: -0.25, auto: -0.25, it: -0.15, "*": -0.1}
+  conflict:
+    description: Geopolitical conflict escalation
+    phrases: [missile strike, airstrike, air strike, military strike, invasion, war escalates, border clash,
+              geopolitical tension, geopolitical tensions]
+    impacts: {defense: 0.5, energy: 0.25, aviation: -0.35, "*": -0.15}
+  rupee_weak:
+    description: Indian rupee weakening (good for exporters)
+    phrases: [rupee falls, rupee weakens, rupee slips, rupee hits record low, rupee slumps]
+    impacts: {it: 0.35, pharma: 0.25, aviation: -0.25, auto: -0.1}
+  rupee_strong:
+    description: Indian rupee strengthening
+    phrases: [rupee rises, rupee strengthens, rupee gains, rupee jumps]
+    impacts: {it: -0.25, pharma: -0.2, aviation: 0.2}
+  usfda_positive:
+    description: US FDA approvals
+    phrases: [fda approval, usfda approval, fda approves, usfda nod]
+    impacts: {pharma: 0.35}
+  usfda_negative:
+    description: US FDA regulatory action
+    phrases: [warning letter, import alert, fda rejects, form 483]
+    impacts: {pharma: -0.4}
+  recession_fears:
+    description: Growth scare
+    phrases: [recession fears, recession risk, economic slowdown, gdp contracts, layoffs surge]
+    impacts: {"*": -0.25, banking: -0.15, auto: -0.2}
